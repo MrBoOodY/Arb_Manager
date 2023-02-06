@@ -51,7 +51,7 @@ class ArbEditorProvider extends ChangeNotifier {
         Map<String, String> myRows = {};
 
         for (var row in rows) {
-          myRows.putIfAbsent(row['key'], () => row[file['key']] ?? '');
+          myRows.putIfAbsent(row['key'], () => row[file['key']] ?? '""');
         }
         pages.putIfAbsent(file['key'], () => myRows);
       }
@@ -67,7 +67,6 @@ class ArbEditorProvider extends ChangeNotifier {
       HiveHelper.setDirectoryPath(
           outputFile.replaceAll('${pages.keys.first}.arb', ''));
     }
-    print(HiveHelper.getDirectoryPath());
     for (var pageKey in pages.keys) {
       File returnedFile = File('${HiveHelper.getDirectoryPath()}$pageKey.arb');
       if (await returnedFile.exists()) {
@@ -76,5 +75,10 @@ class ArbEditorProvider extends ChangeNotifier {
       await returnedFile.create();
       await returnedFile.writeAsString('${pages[pageKey]}');
     }
+  }
+
+  importFile() async {
+    final FilePickerResult? filePickerResult =
+        await FilePicker.platform.pickFiles();
   }
 }
