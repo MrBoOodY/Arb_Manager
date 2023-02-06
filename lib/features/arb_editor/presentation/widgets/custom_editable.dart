@@ -3,6 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:editable/commons/helpers.dart';
 import 'package:editable/widgets/table_body.dart';
 import 'package:editable/widgets/table_header.dart';
@@ -74,7 +76,6 @@ class Editable extends StatefulWidget {
       this.thAlignment = TextAlign.start,
       this.thStyle,
       this.thVertAlignment = CrossAxisAlignment.center,
-      this.showCreateButton = false,
       this.createButtonAlign = CrossAxisAlignment.start,
       this.createButtonIcon,
       this.createButtonColor,
@@ -223,9 +224,6 @@ class Editable extends StatefulWidget {
   /// Size for the saveIcon
   final double saveIconSize;
 
-  /// displays a button that adds a new row onPressed
-  final bool showCreateButton;
-
   /// Aligns the button for adding new rows
   final CrossAxisAlignment createButtonAlign;
 
@@ -283,8 +281,6 @@ class EditableState extends State<Editable> {
   ///Get all edited rows
   List get editedRows => _editedRows;
 
-  ///Create a row after the last row
-  createRow() => addOneRow(columns, rows);
   EditableState({this.rows, this.columns, this.columnCount, this.rowCount});
 
   /// Temporarily holds all edited rows
@@ -300,7 +296,7 @@ class EditableState extends State<Editable> {
     rows = rows ?? rowBlueprint(rowCount!, columns, rows);
 
     /// Builds saveIcon widget
-    Widget _saveIcon(index) {
+    Widget saveIcon(index) {
       return Flexible(
         fit: FlexFit.loose,
         child: Visibility(
@@ -328,7 +324,7 @@ class EditableState extends State<Editable> {
     }
 
     /// Generates table columns
-    List<Widget> _tableHeaders() {
+    List<Widget> tableHeaders() {
       return List<Widget>.generate(columnCount! + 1, (index) {
         return columnCount! + 1 == (index + 1)
             ? iconColumn(widget.showSaveIcon, widget.thPaddingTop,
@@ -351,7 +347,7 @@ class EditableState extends State<Editable> {
     }
 
     /// Generates table rows
-    List<Widget> _tableRows() {
+    List<Widget> tableRows() {
       return List<Widget>.generate(rowCount!, (index) {
         return Row(
           mainAxisSize: MainAxisSize.min,
@@ -367,7 +363,7 @@ class EditableState extends State<Editable> {
             }
             var list = rows![index];
             return columnCount! + 1 == (rowIndex + 1)
-                ? _saveIcon(index)
+                ? saveIcon(index)
                 : RowBuilder(
                     index: index,
                     col: ckeys[rowIndex],
@@ -420,8 +416,6 @@ class EditableState extends State<Editable> {
           scrollDirection: Axis.horizontal,
           child:
               Column(crossAxisAlignment: widget.createButtonAlign, children: [
-            //Table Header
-            createButton(),
             Container(
               padding: EdgeInsets.only(bottom: widget.thPaddingBottom),
               decoration: BoxDecoration(
@@ -432,46 +426,16 @@ class EditableState extends State<Editable> {
               child: Row(
                   crossAxisAlignment: widget.thVertAlignment,
                   mainAxisSize: MainAxisSize.min,
-                  children: _tableHeaders()),
+                  children: tableHeaders()),
             ),
-
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: _tableRows(),
+                  children: tableRows(),
                 ),
               ),
             )
           ]),
-        ),
-      ),
-    );
-  }
-
-  /// Button for creating a new empty row
-  Widget createButton() {
-    return Visibility(
-      visible: widget.showCreateButton,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4.0, bottom: 4),
-        child: InkWell(
-          onTap: () {
-            rows = addOneRow(columns, rows);
-            rowCount = rowCount! + 1;
-            setState(() {});
-          },
-          child: Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              color: widget.createButtonColor ?? Colors.white,
-              boxShadow: [
-                BoxShadow(blurRadius: 2, color: Colors.grey.shade400)
-              ],
-              borderRadius: BorderRadius.circular(10),
-              shape: BoxShape.rectangle,
-            ),
-            child: widget.createButtonIcon ?? const Icon(Icons.add),
-          ),
         ),
       ),
     );

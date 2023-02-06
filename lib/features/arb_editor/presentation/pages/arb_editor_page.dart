@@ -79,7 +79,6 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
     return Scaffold(
       body: Editable(
         borderColor: Colors.grey.shade300,
-        showCreateButton: true,
         borderWidth: 0.25,
         columnRatio: 0.3,
         rows: controller.rows,
