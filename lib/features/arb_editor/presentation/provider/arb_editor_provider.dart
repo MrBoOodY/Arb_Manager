@@ -51,7 +51,7 @@ class ArbEditorProvider extends ChangeNotifier {
         Map<String, String> myRows = {};
 
         for (var row in rows) {
-          myRows.putIfAbsent(row['key'], () => row[file['key']] ?? '""');
+          myRows.putIfAbsent('"${row['key']}"', () => row[file['key']] ?? '""');
         }
         pages.putIfAbsent(file['key'], () => myRows);
       }
