@@ -48,6 +48,14 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
               controller.saveFiles();
             },
           ),
+          MenuEntry(
+            shortcut:
+                const SingleActivator(LogicalKeyboardKey.keyO, control: true),
+            label: 'Import Files',
+            onPressed: () async {
+              controller.importFile();
+            },
+          ),
         ],
       ),
     ];

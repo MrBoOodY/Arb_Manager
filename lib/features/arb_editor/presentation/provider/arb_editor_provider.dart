@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:arb_management/core/core.dart';
@@ -11,11 +12,12 @@ final arbEditorProvider = ChangeNotifierProvider<ArbEditorProvider>((ref) {
 
 class ArbEditorProvider extends ChangeNotifier {
   ArbEditorProvider();
+  static const _headerInit = {
+    "title": 'Key',
+    'key': 'key',
+  };
   final List<Map<String, dynamic>> headers = [
-    {
-      "title": 'Key',
-      'key': 'key',
-    },
+    _headerInit,
   ];
   final List<Map<String, dynamic>> rows = [];
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
@@ -28,7 +30,7 @@ class ArbEditorProvider extends ChangeNotifier {
   }
 
   addRow() {
-    rows.add({'key': 'key_name'});
+    rows.add({'key': 'key_name${rows.length + 1}'});
     notifyListeners();
   }
 
@@ -80,6 +82,36 @@ class ArbEditorProvider extends ChangeNotifier {
 
   importFile() async {
     final FilePickerResult? filePickerResult =
-        await FilePicker.platform.pickFiles();
+        await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      allowedExtensions: ['arb'],
+      type: FileType.custom,
+    );
+    if (filePickerResult != null) {
+      rows.clear();
+      headers.clear();
+      headers.add(_headerInit);
+      for (var platformFile in filePickerResult.files) {
+        final file = File(platformFile.path!);
+        final content = await file.readAsString();
+        final Map decodedContent = jsonDecode(content);
+        final columnName = platformFile.path!.split('/').last.split('.').first;
+
+        headers.add({
+          'key': columnName,
+          'title': columnName,
+        });
+
+        for (var key in decodedContent.keys) {
+          final int index = rows.indexWhere((element) => element['key'] == key);
+          if (index == -1) {
+            rows.add({'key': key, columnName: decodedContent[key]});
+          } else {
+            rows[index][columnName] = decodedContent[key];
+          }
+        }
+      }
+      notifyListeners();
+    }
   }
 }
