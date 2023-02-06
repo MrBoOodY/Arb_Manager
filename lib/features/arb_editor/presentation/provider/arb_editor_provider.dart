@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/helper/hive_helper.dart';
@@ -119,24 +119,24 @@ class ArbEditorProvider extends ChangeNotifier {
   }
 
   exportAsExcelSheet() {
-    // Excel excel = Excel.createExcel();
-    // Sheet sheetObject = excel['SheetName'];
-    // // print(sheetObject.);
+    Excel excel = Excel.createExcel();
+    Sheet sheetObject = excel['SheetName'];
+    // print(sheetObject.);
   }
 
   importExcelSheet() async {
     final FilePickerResult? filePickerResult = await filePick(
+      extension: 'xlsx',
       isMulti: false,
     );
     if (filePickerResult?.files.first.path != null) {
       var bytes = File(filePickerResult!.files.first.path!).readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
       for (var table in excel.tables.keys) {
-        print(table); //sheet Name
-        print(excel.tables[table]?.maxCols);
-        print(excel.tables[table]?.maxRows);
-        for (var row in excel.tables[table]?.rows ?? []) {
-          print("$row");
+        for (List<Data?> row in excel.tables[table]?.rows ?? []) {
+          if (kDebugMode) {
+            print("${row.first?.value}");
+          }
         }
       }
     }

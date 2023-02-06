@@ -17,71 +17,70 @@ class ArbEditorPage extends ConsumerStatefulWidget {
 class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
   late ArbEditorProvider controller = ref.read(arbEditorProvider);
   ShortcutRegistryEntry? _shortcutsEntry;
-  late List<MenuEntry> result;
+  late List<MenuEntry> result = <MenuEntry>[
+    MenuEntry(
+      label: 'Options',
+      menuChildren: <MenuEntry>[
+        MenuEntry(
+          shortcut:
+              const SingleActivator(LogicalKeyboardKey.keyA, control: true),
+          label: 'Add Language',
+          onPressed: () async {
+            final result = await showCustomDialog(context);
+            if (result != null) {
+              controller.addColumn(title: result);
+            }
+          },
+        ),
+        MenuEntry(
+          shortcut: const SingleActivator(LogicalKeyboardKey.keyA,
+              control: true, shift: true, includeRepeats: false),
+          label: 'Add Key',
+          onPressed: () async {
+            controller.addRow();
+          },
+        ),
+        MenuEntry(
+          shortcut: const SingleActivator(LogicalKeyboardKey.keyS,
+              control: true, shift: true),
+          label: 'Save As Excel',
+          onPressed: () async {
+            controller.exportAsExcelSheet();
+          },
+        ),
+        MenuEntry(
+          shortcut:
+              const SingleActivator(LogicalKeyboardKey.keyS, control: true),
+          label: 'Save Files',
+          onPressed: () async {
+            controller.saveFiles();
+          },
+        ),
+        MenuEntry(
+          shortcut:
+              const SingleActivator(LogicalKeyboardKey.keyO, control: true),
+          label: 'Import Excel Sheet',
+          onPressed: () async {
+            controller.importExcelSheet();
+          },
+        ),
+        MenuEntry(
+          shortcut: const SingleActivator(LogicalKeyboardKey.keyO,
+              control: true, shift: true),
+          label: 'Import Files',
+          onPressed: () async {
+            controller.importFile();
+          },
+        ),
+      ],
+    ),
+  ];
 
   @override
-  void initState() {
-    super.initState();
-    result = <MenuEntry>[
-      MenuEntry(
-        label: 'Options',
-        menuChildren: <MenuEntry>[
-          MenuEntry(
-            shortcut:
-                const SingleActivator(LogicalKeyboardKey.keyA, control: true),
-            label: 'Add Language',
-            onPressed: () async {
-              final result = await showCustomDialog(context);
-              if (result != null) {
-                controller.addColumn(title: result);
-              }
-            },
-          ),
-          MenuEntry(
-            shortcut: const SingleActivator(LogicalKeyboardKey.keyA,
-                control: true, shift: true, includeRepeats: false),
-            label: 'Add Key',
-            onPressed: () async {
-              controller.addRow();
-            },
-          ),
-          MenuEntry(
-            shortcut: const SingleActivator(LogicalKeyboardKey.keyS,
-                control: true, shift: true),
-            label: 'Save As Excel',
-            onPressed: () async {
-              controller.exportAsExcelSheet();
-            },
-          ),
-          MenuEntry(
-            shortcut:
-                const SingleActivator(LogicalKeyboardKey.keyS, control: true),
-            label: 'Save Files',
-            onPressed: () async {
-              controller.saveFiles();
-            },
-          ),
-          MenuEntry(
-            shortcut:
-                const SingleActivator(LogicalKeyboardKey.keyO, control: true),
-            label: 'Import Excel Sheet',
-            onPressed: () async {
-              // controller.importFile();
-            },
-          ),
-          MenuEntry(
-            shortcut: const SingleActivator(LogicalKeyboardKey.keyO,
-                control: true, shift: true),
-            label: 'Import Files',
-            onPressed: () async {
-              controller.importFile();
-            },
-          ),
-        ],
-      ),
-    ];
+  void didChangeDependencies() {
     _shortcutsEntry =
         ShortcutRegistry.of(context).addAll(MenuEntry.shortcuts(result));
+    super.didChangeDependencies();
   }
 
   @override
@@ -111,4 +110,3 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
     );
   }
 }
-
