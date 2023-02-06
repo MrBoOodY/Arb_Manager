@@ -41,6 +41,14 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
             },
           ),
           MenuEntry(
+            shortcut: const SingleActivator(LogicalKeyboardKey.keyS,
+                control: true, shift: true),
+            label: 'Save As Excel',
+            onPressed: () async {
+              controller.exportAsExcelSheet();
+            },
+          ),
+          MenuEntry(
             shortcut:
                 const SingleActivator(LogicalKeyboardKey.keyS, control: true),
             label: 'Save Files',
@@ -51,6 +59,14 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
           MenuEntry(
             shortcut:
                 const SingleActivator(LogicalKeyboardKey.keyO, control: true),
+            label: 'Import Excel Sheet',
+            onPressed: () async {
+              // controller.importFile();
+            },
+          ),
+          MenuEntry(
+            shortcut: const SingleActivator(LogicalKeyboardKey.keyO,
+                control: true, shift: true),
             label: 'Import Files',
             onPressed: () async {
               controller.importFile();

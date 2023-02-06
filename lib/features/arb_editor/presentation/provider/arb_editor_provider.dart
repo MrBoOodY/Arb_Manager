@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arb_management/core/core.dart';
+import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,12 +64,13 @@ class ArbEditorProvider extends ChangeNotifier {
     if (HiveHelper.getDirectoryPath() == null) {
       String? outputFile = await FilePicker.platform.saveFile(
           dialogTitle: 'Save Your File to desired location',
+          allowedExtensions: ['arb'],
+          type: FileType.custom,
           fileName: '${pages.keys.first}.arb');
       if (outputFile == null) {
         return;
       }
-      HiveHelper.setDirectoryPath(
-          outputFile.replaceAll('${pages.keys.first}.arb', ''));
+      HiveHelper.setDirectoryPath(outputFile.split('/').removeLast());
     }
     for (var pageKey in pages.keys) {
       File returnedFile = File('${HiveHelper.getDirectoryPath()}$pageKey.arb');
@@ -112,6 +114,32 @@ class ArbEditorProvider extends ChangeNotifier {
         }
       }
       notifyListeners();
+    }
+  }
+
+  exportAsExcelSheet() {
+    Excel excel = Excel.createExcel();
+    Sheet sheetObject = excel['SheetName'];
+    // print(sheetObject.);
+  }
+
+  importExcelSheet() async {
+    final FilePickerResult? filePickerResult =
+        await FilePicker.platform.pickFiles(
+      allowedExtensions: ['arb'],
+      type: FileType.custom,
+    );
+    if (filePickerResult?.files.first.path != null) {
+      var bytes = File(filePickerResult!.files.first.path!).readAsBytesSync();
+      var excel = Excel.decodeBytes(bytes);
+      for (var table in excel.tables.keys) {
+        print(table); //sheet Name
+        print(excel.tables[table]?.maxCols);
+        print(excel.tables[table]?.maxRows);
+        for (var row in excel.tables[table]?.rows ?? []) {
+          print("$row");
+        }
+      }
     }
   }
 }
