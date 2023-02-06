@@ -78,6 +78,10 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
     ArbEditorProvider controller = ref.watch(arbEditorProvider);
     return Scaffold(
       body: Editable(
+        borderColor: Colors.grey.shade300,
+        showCreateButton: true,
+        borderWidth: 0.25,
+        columnRatio: 0.3,
         rows: controller.rows,
         columns: controller.headers,
         onRowSaved: (value) {
