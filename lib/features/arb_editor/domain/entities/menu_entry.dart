@@ -5,8 +5,8 @@ class MenuEntry {
       {required this.label, this.shortcut, this.onPressed, this.menuChildren})
       : assert(menuChildren == null || onPressed == null,
             'onPressed is ignored if menuChildren are provided');
-  final String label;
 
+  final String label;
   final MenuSerializableShortcut? shortcut;
   final VoidCallback? onPressed;
   final List<MenuEntry>? menuChildren;
