@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:arb_management/core/core.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/helper/hive_helper.dart';
 
 final arbEditorProvider = ChangeNotifierProvider<ArbEditorProvider>((ref) {
   return ArbEditorProvider();
@@ -12,15 +13,20 @@ final arbEditorProvider = ChangeNotifierProvider<ArbEditorProvider>((ref) {
 
 class ArbEditorProvider extends ChangeNotifier {
   ArbEditorProvider();
+
   static const _headerInit = {
     "title": 'Key',
     'key': 'key',
   };
+
   final List<Map<String, dynamic>> headers = [
     _headerInit,
   ];
+
   final List<Map<String, dynamic>> rows = [];
+
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+
   addColumn({required String title}) {
     headers.add({
       "title": title,
@@ -81,12 +87,7 @@ class ArbEditorProvider extends ChangeNotifier {
   }
 
   importFile() async {
-    final FilePickerResult? filePickerResult =
-        await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      allowedExtensions: ['arb'],
-      type: FileType.custom,
-    );
+    FilePickerResult? filePickerResult = await file_pick();
     if (filePickerResult != null) {
       rows.clear();
       headers.clear();
@@ -113,5 +114,15 @@ class ArbEditorProvider extends ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  Future<FilePickerResult?> file_pick() async {
+    final FilePickerResult? filePickerResult =
+        await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      allowedExtensions: ['arb'],
+      type: FileType.custom,
+    );
+    return filePickerResult;
   }
 }

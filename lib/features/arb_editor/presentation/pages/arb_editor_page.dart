@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../widgets/dialog_text_field.dart';
+
 class ArbEditorPage extends ConsumerStatefulWidget {
   const ArbEditorPage({super.key});
 
@@ -15,8 +17,11 @@ class ArbEditorPage extends ConsumerStatefulWidget {
 class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
   late ArbEditorProvider controller = ref.read(arbEditorProvider);
   ShortcutRegistryEntry? _shortcutsEntry;
-  List<MenuEntry> result = [];
-  List<MenuEntry> _getMenus() {
+  late List<MenuEntry> result;
+
+  @override
+  void initState() {
+    super.initState();
     result = <MenuEntry>[
       MenuEntry(
         label: 'Options',
@@ -59,12 +64,8 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
         ],
       ),
     ];
-    // (Re-)register the shortcuts with the ShortcutRegistry so that they are
-    // available to the entire application, and update them if they've changed.
-    _shortcutsEntry?.dispose();
     _shortcutsEntry =
         ShortcutRegistry.of(context).addAll(MenuEntry.shortcuts(result));
-    return result;
   }
 
   @override
@@ -88,34 +89,10 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
         },
       ),
       floatingActionButton: MenuBar(
-        children: MenuEntry.build(_getMenus()),
+        children: MenuEntry.build(result),
         // child: Icon(Icons.add),
       ),
     );
   }
 }
 
-Future<String?> showCustomDialog(BuildContext context) async {
-  return await showDialog(
-    context: context,
-    builder: (context) {
-      final TextEditingController controller = TextEditingController();
-      return AlertDialog(
-        actions: [
-          MaterialButton(
-            child: const Text('Add'),
-            onPressed: () {
-              Navigator.pop(context, controller.text);
-            },
-          ),
-        ],
-        content: TextFormField(
-          controller: controller,
-          decoration: const InputDecoration(
-            labelText: 'Enter Column Name',
-          ),
-        ),
-      );
-    },
-  );
-}
