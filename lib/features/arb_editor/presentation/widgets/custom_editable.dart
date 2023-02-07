@@ -314,8 +314,6 @@ class EditableState extends State<Editable> {
                   (element) => element['row'] == index ? true : false);
               if (rowIndex != -1) {
                 widget.onRowSaved!(editedRows[rowIndex]);
-              } else {
-                widget.onRowSaved!('no edit');
               }
             },
           ),

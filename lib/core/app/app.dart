@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         navigatorKey: Utils.navigatorKey,
         title: 'Arb Editor',
         theme: ThemeData(

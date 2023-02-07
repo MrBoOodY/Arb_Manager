@@ -42,9 +42,6 @@ class ArbEditorProvider extends ChangeNotifier {
   }
 
   saveRow({required dynamic row}) {
-    if (row is! Map) {
-      return;
-    }
     for (var key in row.keys) {
       if (key != 'row') {
         rows[row['row']][key] = row[key];
