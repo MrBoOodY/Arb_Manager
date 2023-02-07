@@ -2,7 +2,7 @@
 
 ### ARB Manager  
 <div align="center">
-
+  <video src='https://www.dropbox.com/s/rd9w2fprcygzh1p/how%20to%20use%20arb%20manager%20app.mov?dl=1' width=180/>
 </div>  
   
 
