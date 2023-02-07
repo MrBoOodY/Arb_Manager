@@ -2,7 +2,7 @@
 
 ### ARB Manager  
 <div align="center">
-<img src="https://www.shutterstock.com/image-vector/flat-3d-isometric-business-people-600w-1308894019.jpg" align="center" style="width: 100%" />
+<img src="https://user-images.githubusercontent.com/78202914/217231928-370ee946-427f-4fc0-b57a-802152bf484b.gif" align="center" style="width: 100%" />
 </div>  
   
 
