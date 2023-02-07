@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:arb_management/core/utils.dart';
+import 'package:collection/collection.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../core/helper/hive_helper.dart';
 
 final arbEditorProvider = ChangeNotifierProvider<ArbEditorProvider>((ref) {
   return ArbEditorProvider();
@@ -67,19 +67,15 @@ class ArbEditorProvider extends ChangeNotifier {
       }
     }
 
-    if (HiveHelper.getDirectoryPath() == null) {
-      String? outputFile = await FilePicker.platform.saveFile(
-          dialogTitle: 'Save Your File to desired location',
-          allowedExtensions: ['arb'],
-          type: FileType.custom,
-          fileName: '${pages.keys.first}.arb');
-      if (outputFile == null) {
-        return;
-      }
-      HiveHelper.setDirectoryPath(outputFile.split('/').removeLast());
+    String? outputFile =
+        await _saveFileAndGetDirectory(fileName: '${pages.keys.first}.arb');
+    if (outputFile == null) {
+      return;
     }
     for (var pageKey in pages.keys) {
-      File returnedFile = File('${HiveHelper.getDirectoryPath()}$pageKey.arb');
+      final removed = outputFile.split('/').removeLast();
+      final path = outputFile.replaceAll(removed, '');
+      File returnedFile = File('$path$pageKey.arb');
       if (await returnedFile.exists()) {
         await returnedFile.delete();
       }
@@ -88,8 +84,16 @@ class ArbEditorProvider extends ChangeNotifier {
     }
   }
 
+  Future<String?> _saveFileAndGetDirectory({required String fileName}) async {
+    return await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Your File to desired location',
+        allowedExtensions: [fileName.split('.').last],
+        type: FileType.custom,
+        fileName: fileName);
+  }
+
   importFile() async {
-    FilePickerResult? filePickerResult = await filePick();
+    FilePickerResult? filePickerResult = await _pickFile();
     if (filePickerResult != null) {
       rows.clear();
       headers.clear();
@@ -118,36 +122,87 @@ class ArbEditorProvider extends ChangeNotifier {
     }
   }
 
-  exportAsExcelSheet() {
+  exportAsExcelSheet() async {
     Excel excel = Excel.createExcel();
-    Sheet sheetObject = excel['SheetName'];
-    // print(sheetObject.);
+    Sheet sheetObject = excel['translations'];
+    List<String> headerRow = [];
+    List<List<String>> excelRows = [];
+    for (Map header in headers) {
+      headerRow.add(header['key']);
+    }
+    for (Map row in rows) {
+      final List<String> excelRow = [];
+      for (var rowValue in row.values) {
+        excelRow.add(rowValue);
+      }
+      excelRows.add(excelRow);
+    }
+
+    sheetObject.appendRow(headerRow);
+    for (var row in excelRows) {
+      sheetObject.appendRow(row);
+    }
+    const excelSheetName = "arb_translations.xlsx";
+
+    final List<int>? fileBytes = excel.save(fileName: excelSheetName);
+    if (fileBytes == null) {
+      return;
+    }
+    String? fileDirectory =
+        await _saveFileAndGetDirectory(fileName: excelSheetName);
+    if (fileDirectory == null) {
+      return;
+    }
+    final outputFile = File(fileDirectory);
+    outputFile
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(fileBytes);
   }
 
   importExcelSheet() async {
-    final FilePickerResult? filePickerResult = await filePick(
-      extension: 'xlsx',
+    final FilePickerResult? filePickerResult = await _pickFile(
+      extension: ['xlsx', 'xls'],
       isMulti: false,
     );
     if (filePickerResult?.files.first.path != null) {
       var bytes = File(filePickerResult!.files.first.path!).readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
-      for (var table in excel.tables.keys) {
-        for (List<Data?> row in excel.tables[table]?.rows ?? []) {
-          if (kDebugMode) {
-            print("${row.first?.value}");
-          }
+      Sheet? table = excel.tables.values
+          .firstWhereOrNull((element) => element.rows.isNotEmpty);
+      if (table == null) {
+        Utils.showErrorToast('Can\'nt Find App Translation Schema');
+        return;
+      }
+      headers.clear();
+      rows.clear();
+      for (var headerTitle in table.rows.first) {
+        final value = (headerTitle!.value as SharedString).toString();
+
+        headers.add({
+          'key': value,
+          'title': value,
+        });
+      }
+      final finalExcelRows = table.rows..removeAt(0);
+
+      for (List<Data?> excelRow in finalExcelRows) {
+        final Map<String, dynamic> currentRow = {};
+        for (var i = 0; i < excelRow.length; i++) {
+          final value = (excelRow[i]!.value as SharedString).toString();
+          currentRow.putIfAbsent(headers[i]['key'], () => value);
         }
+        rows.add(currentRow);
       }
     }
+    notifyListeners();
   }
 
-  Future<FilePickerResult?> filePick(
-      {bool isMulti = true, String? extension}) async {
+  Future<FilePickerResult?> _pickFile(
+      {bool isMulti = true, List<String>? extension}) async {
     final FilePickerResult? filePickerResult =
         await FilePicker.platform.pickFiles(
       allowMultiple: isMulti,
-      allowedExtensions: [extension ?? 'arb'],
+      allowedExtensions: extension ?? ['arb'],
       type: FileType.custom,
     );
     return filePickerResult;

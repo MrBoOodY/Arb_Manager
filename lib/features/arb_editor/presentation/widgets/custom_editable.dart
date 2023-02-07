@@ -370,7 +370,7 @@ class EditableState extends State<Editable> {
                     trHeight: widget.trHeight,
                     borderColor: widget.borderColor,
                     borderWidth: widget.borderWidth,
-                    cellData: list[ckeys[rowIndex]],
+                    cellData: list[ckeys[rowIndex]] ?? '',
                     tdPaddingLeft: widget.tdPaddingLeft,
                     tdPaddingTop: widget.tdPaddingTop,
                     tdPaddingBottom: widget.tdPaddingBottom,

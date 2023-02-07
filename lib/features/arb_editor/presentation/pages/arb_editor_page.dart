@@ -57,16 +57,16 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
           },
         ),
         MenuEntry(
-          shortcut:
-              const SingleActivator(LogicalKeyboardKey.keyO, control: true),
+          shortcut: const SingleActivator(LogicalKeyboardKey.keyO,
+              control: true, shift: true),
           label: 'Import Excel Sheet',
           onPressed: () async {
             controller.importExcelSheet();
           },
         ),
         MenuEntry(
-          shortcut: const SingleActivator(LogicalKeyboardKey.keyO,
-              control: true, shift: true),
+          shortcut:
+              const SingleActivator(LogicalKeyboardKey.keyO, control: true),
           label: 'Import Files',
           onPressed: () async {
             controller.importFile();
@@ -91,9 +91,11 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
 
   @override
   Widget build(BuildContext context) {
-    ArbEditorProvider controller = ref.watch(arbEditorProvider);
+    final ArbEditorProvider controller = ref.watch(arbEditorProvider);
+
     return Scaffold(
       body: Editable(
+        key: UniqueKey(),
         borderColor: Colors.grey.shade300,
         borderWidth: 0.25,
         columnRatio: 0.3,

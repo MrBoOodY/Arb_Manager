@@ -1,3 +1,4 @@
+import 'package:arb_management/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
+        navigatorKey: Utils.navigatorKey,
         title: 'Arb Editor',
         theme: ThemeData(
           useMaterial3: true,
