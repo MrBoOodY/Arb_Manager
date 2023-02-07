@@ -2,7 +2,7 @@
 
 ### ARB Manager  
 <div align="center">
-<img src="https://user-images.githubusercontent.com/78202914/217231928-370ee946-427f-4fc0-b57a-802152bf484b.gif" align="center" style="height: 20%" />
+<img src="https://user-images.githubusercontent.com/78202914/217231928-370ee946-427f-4fc0-b57a-802152bf484b.gif" align="center" width="100" height="100" />
 </div>  
   
 
