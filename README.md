@@ -26,17 +26,6 @@ the app made to translate your flutter project or any project that depends on '.
 
 - export excel sheet  
   
-
-
-
-### Excel Sheet Advantages:  
-You can export your translations as excel sheet then put it on google excel sheet to translate the whole file free without any extra action then import it again into the app then export your arb files.
-
-Thanks,  
-Abdullah.  
-  
-
-<br/>  
  
 
 
@@ -76,6 +65,16 @@ Abdullah.
 
 <br/>  
 
+
+
+### Excel Sheet Advantages:  
+You can export your translations as excel sheet then put it on google excel sheet to translate the whole file free without any extra action then import it again into the app then export your arb files.
+
+Thanks,  
+Abdullah.  
+  
+
+<br/>  
 
 ## Connect with me  
 <div align="center">
