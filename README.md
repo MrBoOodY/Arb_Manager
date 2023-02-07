@@ -39,6 +39,44 @@ Abdullah.
 <br/>  
  
 
+
+### Steps:  
+### <div align="center"></div>  
+  
+
+##### To Add Language File :  
+  
+
+- Press on options  
+  
+
+- Add Language  
+  
+
+- Enter your language name  
+  
+
+- Press on Add  
+  
+
+##### To Add Key For Your Language:  
+  
+
+- Press on options  
+  
+
+- Add Key  
+  
+
+- Enter your key name under key column  
+  
+
+- Enter Your Translation for the key under language column  
+  
+
+<br/>  
+
+
 ## Connect with me  
 <div align="center">
 <a href="https://github.com/MrBoOodY" target="_blank">
