@@ -2,7 +2,7 @@
 
 ### ARB Manager  
 <div align="center">
-<img src="https://user-images.githubusercontent.com/78202914/217231928-370ee946-427f-4fc0-b57a-802152bf484b.gif" align="center" width="40%" height="10%" />
+  <video   type="video/mp4" src='https://www.dropbox.com/s/yvlq9667htq8aon/arb%20manager.mp4?dl=1' width=33%/>
 </div>  
   
 
