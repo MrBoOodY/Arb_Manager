@@ -70,7 +70,7 @@ class ArbEditorProvider extends ChangeNotifier {
       return;
     }
     for (var pageKey in pages.keys) {
-      final removed = outputFile.split('/').removeLast();
+      final removed = outputFile.split(Platform.pathSeparator).removeLast();
       final path = outputFile.replaceAll(removed, '');
       File returnedFile = File('$path$pageKey.arb');
       if (await returnedFile.exists()) {
@@ -99,7 +99,11 @@ class ArbEditorProvider extends ChangeNotifier {
         final file = File(platformFile.path!);
         final content = await file.readAsString();
         final Map decodedContent = jsonDecode(content);
-        final columnName = platformFile.path!.split('/').last.split('.').first;
+        final columnName = platformFile.path!
+            .split(Platform.pathSeparator)
+            .last
+            .split('.')
+            .first;
 
         headers.add({
           'key': columnName,
