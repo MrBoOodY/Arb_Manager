@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: Utils.navigatorKey,
-        title: 'Arb Editor',
+        title: 'ARB Manager',
         theme: ThemeData(
           useMaterial3: true,
           primarySwatch: Colors.blue,

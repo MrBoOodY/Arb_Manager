@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "arb_management" "\0"
+            VALUE "FileDescription", "ARB Manager" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "arb_management" "\0"
+            VALUE "InternalName", "ARB Manager" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "arb_management.exe" "\0"
-            VALUE "ProductName", "arb_management" "\0"
+            VALUE "OriginalFilename", "ARB Manager.exe" "\0"
+            VALUE "ProductName", "ARB Manager" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
