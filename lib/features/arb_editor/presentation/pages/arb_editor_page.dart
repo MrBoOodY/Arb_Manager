@@ -95,7 +95,8 @@ class _ArbEditorPageState extends ConsumerState<ArbEditorPage> {
 
     return Scaffold(
       body: Editable(
-        key: UniqueKey(),
+        key: controller.editableKey,
+        showRemoveIcon: true,
         borderColor: Colors.grey.shade300,
         borderWidth: 0.25,
         columnRatio: 0.3,

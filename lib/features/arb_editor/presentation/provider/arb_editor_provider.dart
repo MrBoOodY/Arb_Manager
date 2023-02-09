@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arb_management/core/utils.dart';
+import 'package:arb_management/features/arb_editor/presentation/widgets/custom_editable.dart';
 import 'package:collection/collection.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final arbEditorProvider = ChangeNotifierProvider<ArbEditorProvider>((ref) {
@@ -14,6 +15,7 @@ final arbEditorProvider = ChangeNotifierProvider<ArbEditorProvider>((ref) {
 
 class ArbEditorProvider extends ChangeNotifier {
   ArbEditorProvider();
+  final editableKey = GlobalKey<EditableState>();
 
   static const _headerInit = {
     "title": 'Key',
@@ -37,8 +39,7 @@ class ArbEditorProvider extends ChangeNotifier {
   }
 
   addRow() {
-    rows.add({'key': 'key_name${rows.length + 1}'});
-    notifyListeners();
+    editableKey.currentState!.createRow();
   }
 
   saveRow({required dynamic row}) {
